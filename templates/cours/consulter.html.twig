@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CONSULTATION D'UN COURS{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+    <div class="card" style="box-shadow: lightgrey 1px 1px 10px 1px">
+        <div class="card-body p-4">
+            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                    <h5 class="card-title fw-semibold mb-4">CONSULTATION D'UN COURS :</h5>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="mb-3 mb-sm-0">
+                        <a href="/23JELMUSIC/public/cours/modifier/{{ cours.id }}"><button type="button" class="btn btn-primary m-1">Modifier</button></a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle ">
+                    <thead class="text-dark fs-4">
+                        <tr><td>Professeur :</td><td>{{cours.professeur.nom}} {{cours.professeur.prenom}}</td></tr>
+                        <tr><td>Type d'instrument : </td><td><a href="{{ path('instrumentConsulter', { 'id': cours.typeInstruments.id }) }}">{{cours.typeInstruments.libelle}}</a></td></tr>
+                        <tr><td>Jours : </td><td>{{cours.jours.libelle}}</td></tr>
+                        <tr><td>Heure de début : </td><td>{{cours.heuredebut|date('H:i')}}</td></tr>
+                        <tr><td>Heure de fin : </td><td>{{cours.heurefin|date('H:i')}}</td></tr>
+                        <tr><td>Age Minimum : </td><td>{{cours.agemini}} ans</td></tr>
+                        <tr><td>Age Maximum : </td><td>{{cours.agemaxi}} ans</td></tr>
+                        <tr><td>Nombre de places : </td><td>{{cours.nbplaces}}</td></tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                    <h3 class="card-title fw-semibold mb-4">LISTE DES ELEVES INSCRITS :</h3>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div>
+                        <a href="/23JELMUSIC/public/inscription/ajouter"><button type="button" class="btn btn-primary m-1">Ajouter</button></a>
+                    </div>
+                {% endif %}
+            </div>
+            <table class="table text-nowrap mb-0 align-middle">
+                <tr class="tableauConsulterTitre">
+                    <td>Nom</td>
+                    <td>Prénom</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>Actions</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    {% for inscription in eleveInscrits %}
+                        <tr>
+                            <td>{{inscription.eleve.prenom}}</td>
+                            <td>{{inscription.eleve.nom}}</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td ><a href="/23JELMUSIC/public/eleve/modifier/{{ inscription.eleve.id }}">✏️</a></td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <td>Aucun élève inscrit.</td>
+                        <td></td>
+                        <td></td>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="mb-3 mb-sm-0">
+        <a href="/23JELMUSIC/public/cours/lister"><button type="button" class="btn btn-primary m-1">Retour</button></a>
+    </div>
+    <br>
+    <br>
+    <br>
+{% endblock %}
+{% block javascripts %}{% endblock %}
